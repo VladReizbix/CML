@@ -10,14 +10,7 @@ admin_ids = [897929245]
 
 @bot.message_handler(commands=['start', 'help'])
 def handle_start(message):
-    
-    photo_url = 'https://sun9-75.userapi.com/impg/t4sq3nroP1WW0YIQgTjh6mgFUNUbxpZrAZtL8g/PPkH9eY1_Qo.jpg?size=2560x1895&quality=95&sign=25d5a8baa86df5d52abdd6c593afdeb4&type=album'
-    response = requests.get(photo_url)
-    if response.status_code == 200:
-        bot.send_photo(message.chat.id, response.content)
-        bot.reply_to(message, "Привет!🤖 Я ЦМЛ-БОТ! Напиши свою ФИО в таком порядке: Лапин Владислав")
-    else:
-        bot.reply_to(message, "Произошла ошибка при загрузке фотографии.")
+    bot.reply_to(message, "Привет!🤖 Я ЦМЛ-БОТ! Введи свою Фамилию и Имя в таком порядке: Лапин Владислав")
 
 @bot.message_handler()
 def handle_text(message: Message):
