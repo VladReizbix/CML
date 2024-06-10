@@ -4,7 +4,7 @@ from telebot.types import Message, ReplyKeyboardMarkup, KeyboardButton
 import os
 import requests
 
-bot = telebot.TeleBot('6905965448:AAGJuRakgoRAP_Fm7r4m2DmZSlP5aE9r0-o',parse_mode="Markdown")
+bot = telebot.TeleBot('6766431942:AAHv6WDbCvYszQyoM51L1lzXNNHpLg0Rl7w',parse_mode="Markdown")
 admin_ids = [897929245]
 
 
