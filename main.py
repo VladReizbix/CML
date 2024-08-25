@@ -4,7 +4,7 @@ from telebot.types import Message, ReplyKeyboardMarkup, KeyboardButton
 import os
 import requests
 
-bot = telebot.TeleBot('6905965448:AAGJuRakgoRAP_Fm7r4m2DmZSlP5aE9r0-o',parse_mode="Markdown")
+bot = telebot.TeleBot('6766431942:AAHv6WDbCvYszQyoM51L1lzXNNHpLg0Rl7w',parse_mode="Markdown")
 admin_ids = [897929245]
 
 
@@ -15,7 +15,7 @@ def handle_start(message):
     response = requests.get(photo_url)
     if response.status_code == 200:
         bot.send_photo(message.chat.id, response.content)
-        bot.reply_to(message, "Привет!🤖 Я ЦМЛ-БОТ! Напиши свою ФИО в таком порядке: Лапин Владислав Дмитриевич")
+        bot.reply_to(message, "Привет!🤖 Я ЦМЛ-БОТ! Напиши свое ИМЯ в таком порядке: Лапин Владислав")
     else:
         bot.reply_to(message, "Произошла ошибка при загрузке фотографии.")
 
@@ -34,13 +34,16 @@ def handle_text(message: Message):
 
     bot.delete_message(msg.chat.id, msg.message_id)
     if not row.empty:
+        photo_url = row['URL фото'].values[0] if 'URL фото' in row.columns else None
+        # Форматирование значения "Общий коэффициент умножения" с одним десятичным знаком
+        общий_коэффициент = float(row['Общий коэффициент умножения'].values[0])
         text = f"""
-*Имя волонтёра:* {name}
+Имя волонтёра: {name}
 
 💥 Номер участника: {int(row['№ участника'].values[0])}
 📈 Количество дней в проекте: {int(row['Количество дней в проекте'].values[0])}
 🧾 Количество выполненных заданий: {int(row['Активности (заданий) всего'].values[0])}
-📊 Oбщий коэффициент умножения: {row['Общий коэффициент умножения'].values[0]:.1f}
+📊 Общий коэффициент умножения: {общий_коэффициент:.1f}
 
 ⌚ Часы в штабе и в штате: {int(row['Часы в штабе и штате'].values[0])}
 ⏱ Часы за выполненные задания: {int(row['Часы за выполненные задания'].values[0])}
@@ -53,6 +56,11 @@ def handle_text(message: Message):
 👤 Баллы от рефералов: {int(row['Баллы от рефералов'].values[0])}
 👥 Количество рефералов: {int(row['Общее количество рефералов'].values[0])}
 """
+        if photo_url:
+            photo_response = requests.get(photo_url)
+            bot.send_photo(message.chat.id, photo_response.content, caption=text, parse_mode='Markdown')
+        else:
+            bot.send_message(message.chat.id, text, parse_mode='Markdown')
     else:
         bot.send_message(message.chat.id, f"Данный запрос '{name}' не найден в системе, попробуйте ввести по-другому.")
 
